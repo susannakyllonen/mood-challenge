@@ -26,14 +26,14 @@ function parseYmdUTC(ymd: string) {
 
 const Wrapper = styled.header`
   display: grid;
-  gap: 0.25rem;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
 `;
 
 const TitleRow = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   align-items: baseline;
   justify-content: center;
   flex-wrap: wrap;

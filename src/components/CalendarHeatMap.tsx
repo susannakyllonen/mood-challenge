@@ -26,6 +26,7 @@ type Props = {
   days?: number; // default 30
   startWeekOn?: "mon" | "sun"; // default "mon"
   onSelectDay?: (date: string) => void; // optional click handler
+  showDetailedLegend?: boolean;
 };
 
 /** Helpers */
@@ -76,19 +77,13 @@ const Title = styled.h3`
   font-size: 1.05rem;
 `;
 
-const Heat = styled.div<{ $cols: number }>`
-  display: grid;
-  grid-auto-flow: column; /* fill by columns */
-  grid-template-rows: repeat(7, 14px); /* 7 rows = weekdays */
-  grid-auto-columns: 14px;
-  column-gap: 4px;
-  row-gap: 4px;
-`;
+const CELL = 20;
+const GAP = 6;
 
 const Cell = styled.button<{ $level: 0 | 1 | 2 | 3 | 4 | 5 }>`
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
+  width: ${CELL}px;
+  height: ${CELL}px;
+  border-radius: 4px;
   border: 1px solid #e5e7eb;
   background: ${({ $level }) => ($level === 0 ? COLOR_NONE : SCALE[$level])};
   cursor: ${({ $level }) => ($level === 0 ? "default" : "pointer")};
@@ -98,32 +93,72 @@ const Cell = styled.button<{ $level: 0 | 1 | 2 | 3 | 4 | 5 }>`
   &:hover {
     filter: brightness(0.95);
   }
-`;
-
-const Legend = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #6b7280;
-`;
-
-const Swatch = styled.span<{ $level: 0 | 1 | 2 | 3 | 4 | 5 }>`
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 3px;
-  background: ${({ $level }) => ($level === 0 ? COLOR_NONE : SCALE[$level])};
+  &:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 1px;
+  }
 `;
 
 const WeekdayCol = styled.div`
   display: grid;
-  grid-template-rows: repeat(7, 14px);
+  grid-template-rows: repeat(7, ${CELL}px);
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
+  row-gap: ${GAP}px;
+  font-size: 14px;
   color: #9ca3af;
+  text-align: right;
+  padding-right: 8px;
+  user-select: none;
+`;
+
+const Heat = styled.div<{ $cols: number }>`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, ${CELL}px);
+  grid-auto-columns: ${CELL}px;
+  column-gap: ${GAP}px;
+  row-gap: ${GAP}px;
+`;
+
+const LegendWrap = styled.div`
+  display: grid;
+  gap: 6px;
+`;
+
+const LegendTitle = styled.div`
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+`;
+
+const LegendList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+`;
+
+const LegendItem = styled.li`
+  display: grid;
+  grid-template-columns: 16px auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #111827;
+`;
+
+const Swatch = styled.span<{ $color: string }>`
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid #e5e7eb;
+  background: ${({ $color }) => $color};
+`;
+
+const Emoji = styled.span`
+  font-size: 16px;
 `;
 
 export default function CalendarHeatMap({
@@ -131,6 +166,7 @@ export default function CalendarHeatMap({
   days = 30,
   startWeekOn = "mon",
   onSelectDay,
+  showDetailedLegend = true,
 }: Props) {
   // Map date -> entry
   const byDate = useMemo(() => {
@@ -203,16 +239,43 @@ export default function CalendarHeatMap({
         </Heat>
       </div>
 
-      <Legend aria-hidden>
-        <span>Less</span>
-        <Swatch $level={0} />
-        <Swatch $level={1} />
-        <Swatch $level={2} />
-        <Swatch $level={3} />
-        <Swatch $level={4} />
-        <Swatch $level={5} />
-        <span>More</span>
-      </Legend>
+      {showDetailedLegend && (
+        <LegendWrap>
+          <LegendTitle>What the colors mean</LegendTitle>
+          <LegendList>
+            <LegendItem>
+              <Swatch $color={COLOR_NONE} />
+              <Emoji aria-hidden>—</Emoji>
+              <span>No entry</span>
+            </LegendItem>
+            <LegendItem>
+              <Swatch $color={SCALE[1]} />
+              <Emoji aria-hidden>😞</Emoji>
+              <span>Very bad</span>
+            </LegendItem>
+            <LegendItem>
+              <Swatch $color={SCALE[2]} />
+              <Emoji aria-hidden>🙁</Emoji>
+              <span>Bad</span>
+            </LegendItem>
+            <LegendItem>
+              <Swatch $color={SCALE[3]} />
+              <Emoji aria-hidden>😐</Emoji>
+              <span>Okay</span>
+            </LegendItem>
+            <LegendItem>
+              <Swatch $color={SCALE[4]} />
+              <Emoji aria-hidden>🙂</Emoji>
+              <span>Good</span>
+            </LegendItem>
+            <LegendItem>
+              <Swatch $color={SCALE[5]} />
+              <Emoji aria-hidden>😄</Emoji>
+              <span>Very good</span>
+            </LegendItem>
+          </LegendList>
+        </LegendWrap>
+      )}
     </Wrap>
   );
 }
