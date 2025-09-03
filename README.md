@@ -16,9 +16,11 @@
 - One mood per day editing allowed
 - See history (30 days)
 
-## Architecture
+## Architecture / Design choises
 
-...
+- Styling with styled-components
+- Single page app: Add today's mood (1-5 emoji picture) + optional note, see history below
+- One entry per day, saving again overwrites the existing entry
 
 ## Improvements if more time
 
