@@ -12,7 +12,7 @@ const Bar = styled.div`
 `;
 
 const Hint = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: #6b7280;
 `;
 

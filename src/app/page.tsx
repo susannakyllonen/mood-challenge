@@ -17,6 +17,7 @@ import {
 } from "@/lib/moodStorage";
 import CalendarHeatMap from "@/components/CalendarHeatMap";
 import CalendarDayCard from "@/components/CalendarDayCard";
+import TrackProgress from "@/components/TrackProgress";
 
 const Container = styled.main`
   width: 100%;
@@ -98,6 +99,7 @@ export default function Page() {
       <Header
         title="Mood Challenge"
         subtitle="Log one mood per day with an optional short note. Data is stored locally."
+        dateYmd={today}
       />
 
       <Section>
@@ -105,6 +107,15 @@ export default function Page() {
         <NoteInput value={note} onChange={setNote} />
         <SaveBar isUpdate={isUpdate} ready={ready} onSave={handleSave} />
       </Section>
+
+      <Section style={{ marginTop: 12 }}>
+        <CalendarDayCard
+          entry={selectedEntry}
+          title="Mood entry"
+          maxCollapsedChars={200}
+        />
+      </Section>
+
       <Section style={{ marginTop: 16 }}>
         <CalendarHeatMap
           entries={data.entries}
@@ -113,12 +124,9 @@ export default function Page() {
           onSelectDay={(date) => setSelectedDate(date)}
         />
       </Section>
-      <Section style={{ marginTop: 12 }}>
-        <CalendarDayCard
-          entry={selectedEntry}
-          title="Mood entry"
-          maxCollapsedChars={200}
-        />
+
+      <Section>
+        <TrackProgress entries={data.entries} windowDays={30} />
       </Section>
     </Container>
   );
