@@ -94,7 +94,7 @@ const NoteInput = forwardRef<HTMLTextAreaElement, NoteInputProps>(
           ref={ref}
           $warn={warn}
           value={value}
-          onChange={(e) => onChange?.(e.target.value)}
+          onChange={(e) => onChange?.(e.target.value.slice(0, 200))}
           maxLength={maxLength}
           placeholder={placeholder}
           rows={rows}
