@@ -2,7 +2,12 @@
 
 ## Setup
 
-...
+- Tech stack: Next.js, TypeScript, styled-components
+- Data layer: No backend, no database. Persist locally with localStorage
+- Install & run
+  - Clone the repo - git clone
+  - npm install
+  - npm run dev
 
 ## MVP Features
 
