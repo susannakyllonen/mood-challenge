@@ -17,6 +17,7 @@
 - See history (30 days)
 - Track progress - days logged out of 30
 - Track streak
+- Testing
 
 ## Architecture / Design choises
 
